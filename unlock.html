@@ -8,6 +8,16 @@
     <!-- SUPABASE JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+    <!-- ========================================================= -->
+    <!-- [1] ADSTERRA: POPUNDER -->
+    <!-- ========================================================= -->
+    <script data-cfasync="false" src="https://abscloud.org/1/3c7350298c6be5b7d02e8c71bc691047"></script>
+
+    <!-- ========================================================= -->
+    <!-- [2] ADSTERRA: SOCIAL BAR -->
+    <!-- ========================================================= -->
+    <script data-cfasync="false" src="https://bauval.org/14/094716c25e7743086f7ab11b96618427"></script>
+
     <style>
         * {
             box-sizing: border-box;
@@ -140,6 +150,18 @@
             font-weight: 600;
         }
 
+        /* CONTAINER IKLAN NATIVE BANNER */
+        .ad-native-container {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50px;
+            background: #f8fafc;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
         /* TOMBOL GET YOUR LINK */
         .get-link-btn {
             display: flex;
@@ -234,6 +256,14 @@
 
         <div class="progress-text" id="progressText">Steps Completed 0/0</div>
 
+        <!-- ========================================================= -->
+        <!-- [3] ADSTERRA: NATIVE BANNER -->
+        <!-- ========================================================= -->
+        <div class="ad-native-container">
+            <script async="async" data-cfasync="false" src="https://bauval.org/21/6b5eca2bdea6cb445f3ba6dbcda463ab"></script>
+            <div id="container-6b5eca2bdea6cb445f3ba6dbcda463ab"></div>
+        </div>
+
         <button id="unlockBtn" class="get-link-btn" onclick="openFinalLink()" disabled>
             <span>🔗 Get Your Link</span>
             <span>➔</span>
@@ -255,6 +285,11 @@
         const SUPABASE_URL = 'https://rntzkzehtcnernjzfxcs.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_QsdJxlNLuWz9vvaDQ3AJBQ_gruuJ6sk';
         const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // =========================================================
+        // [4] ADSTERRA: SMARTLINK URL
+        // =========================================================
+        const ADSTERRA_SMARTLINK = "https://asiafilm.org/4/13722116901b22fc8103d89238d62dea";
 
         let DESTINATION_URL = "";
         let taskList = [];
@@ -320,7 +355,15 @@
 
         function processTask(taskNumber, taskUrl) {
             if (taskUrl) {
-                window.open(taskUrl, '_blank');
+                // 1. Membuka Smartlink Iklan di tab baru
+                if (ADSTERRA_SMARTLINK) {
+                    window.open(ADSTERRA_SMARTLINK, '_blank');
+                }
+                
+                // 2. Tab utama diarahkan ke link tugas (misal: YouTube/Instagram)
+                setTimeout(() => {
+                    window.location.href = taskUrl;
+                }, 300);
             }
 
             const currentBtn = document.getElementById(`task${taskNumber}`);
