@@ -37,13 +37,11 @@
             transition: filter 0.3s ease;
         }
 
-        /* PROTEKSI ANTI-SCREENSHOT & BLUR SAAT PINDAH TAB */
         body.blurred {
             filter: blur(25px) grayscale(100%);
             pointer-events: none;
         }
 
-        /* HEADER BRANDING */
         .header-brand {
             width: 100%;
             max-width: 460px;
@@ -59,7 +57,6 @@
             color: #0b2545;
         }
 
-        /* KARTU UTAMA MISI */
         .main-card {
             width: 100%;
             max-width: 460px;
@@ -97,7 +94,6 @@
             margin-bottom: 15px;
         }
 
-        /* TOMBOL SYARAT MERAH */
         .btn-task {
             display: flex;
             align-items: center;
@@ -150,7 +146,6 @@
             font-weight: 600;
         }
 
-        /* CONTAINER IKLAN NATIVE BANNER */
         .ad-native-container {
             margin: 15px 0;
             display: flex;
@@ -162,7 +157,6 @@
             overflow: hidden;
         }
 
-        /* TOMBOL GET YOUR LINK */
         .get-link-btn {
             display: flex;
             align-items: center;
@@ -185,7 +179,6 @@
             box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
         }
 
-        /* KOTAK PEMBUAT LINK */
         .creator-box {
             background: #181e29;
             border-radius: 16px;
@@ -217,7 +210,6 @@
             box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
 
-        /* FOOTER */
         .info-footer-section {
             width: 100%;
             max-width: 460px;
@@ -239,13 +231,11 @@
 </head>
 <body>
 
-    <!-- BRAND HEADER -->
     <div class="header-brand">
         <span style="font-size: 20px;">🛍️</span>
         <h2 class="brand-title">sub4unloock</h2>
     </div>
 
-    <!-- MAIN CARD MISI -->
     <div class="main-card">
         <h1 class="title">Complete Steps to Unlock</h1>
         <span class="badge-step">COMPLETE ALL STEPS BELOW</span>
@@ -275,20 +265,16 @@
         </div>
     </div>
 
-    <!-- FOOTER INFORMASI -->
     <div class="info-footer-section">
         <h3 class="info-title">sub4unloock.com</h3>
         <p class="copyright-text">© Copyright <strong>sub4unloock.com</strong> All Rights Reserved</p>
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://rntzkzehtcnernjzfxcs.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_QsdJxlNLuWz9vvaDQ3AJBQ_gruuJ6sk';
+        const SUPABASE_URL = 'https://rhlfowrffdjkiqlckzwf.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable__0Ani2ZnbQxeLEVrVjCvEQ_aAx4SV3c';
         const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // =========================================================
-        // [4] ADSTERRA: SMARTLINK URL
-        // =========================================================
         const ADSTERRA_SMARTLINK = "https://asiafilm.org/4/13722116901b22fc8103d89238d62dea";
 
         let DESTINATION_URL = "";
@@ -299,7 +285,6 @@
             const urlParams = new URLSearchParams(window.location.search);
             let linkId = urlParams.get('id');
 
-            // Jika tidak ada di parameter URL, ambil dari path (misal: /unlock/6a00824c)
             if (!linkId) {
                 const pathParts = window.location.pathname.split('/').filter(p => p);
                 if (pathParts.length > 0) {
@@ -331,7 +316,7 @@
             container.innerHTML = '';
 
             if (taskList.length === 0) {
-                container.innerHTML = '<p style="color:#64748b; font-size:13px; margin: 10px 0;">Tidak ada syarat tugas atau link tidak ditemukan.</p>';
+                container.innerHTML = '<p style="color:#64748b; font-size:13px; margin: 10px 0;">Tidak ada syarat tugas.</p>';
                 const unlockBtn = document.getElementById('unlockBtn');
                 if (unlockBtn) {
                     unlockBtn.classList.add('active');
@@ -366,12 +351,9 @@
 
         function processTask(taskNumber, taskUrl) {
             if (taskUrl) {
-                // 1. Membuka Smartlink Iklan di tab baru
                 if (ADSTERRA_SMARTLINK) {
                     window.open(ADSTERRA_SMARTLINK, '_blank');
                 }
-                
-                // 2. Tab utama diarahkan ke link tugas (misal: YouTube/Instagram)
                 setTimeout(() => {
                     window.location.href = taskUrl;
                 }, 300);
@@ -411,7 +393,6 @@
             window.location.href = '/';
         }
 
-        /* FITUR ANTI-SCREENSHOT & BLUR SAAT PINDAH TAB */
         window.addEventListener('blur', () => {
             document.body.classList.add('blurred');
         });
