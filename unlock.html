@@ -240,9 +240,7 @@
 
         <div class="progress-text" id="progressText">Steps Completed 0/0</div>
 
-        <!-- ========================================================= -->
-        <!-- [3] ADSTERRA: NATIVE BANNER -->
-        <!-- ========================================================= -->
+        <!-- ADSTERRA: NATIVE BANNER -->
         <div class="ad-native-container">
             <script async="async" data-cfasync="false" src="https://bauval.org/21/6b5eca2bdea6cb445f3ba6dbcda463ab"></script>
             <div id="container-6b5eca2bdea6cb445f3ba6dbcda463ab"></div>
@@ -353,11 +351,16 @@
 
         function processTask(taskNumber, taskUrl) {
             if (taskUrl) {
+                let formattedUrl = taskUrl.trim();
+                if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
+                    formattedUrl = 'https://' + formattedUrl;
+                }
+
                 if (ADSTERRA_SMARTLINK) {
                     window.open(ADSTERRA_SMARTLINK, '_blank');
                 }
                 setTimeout(() => {
-                    window.location.href = taskUrl;
+                    window.open(formattedUrl, '_blank');
                 }, 300);
             }
 
