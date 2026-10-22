@@ -1,1 +1,1 @@
-/unlock/:id  /unlock.html?id=:id  200
+/unlock/* /unlock.html 200
