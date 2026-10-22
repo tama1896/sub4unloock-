@@ -294,8 +294,8 @@
                 const { error } = await db.from('links').upsert([payload]);
                 if (error) throw error;
 
-                // MENGGUNAKAN LINK PENDEK TANPA unlock.html?id=
-                const directUrl = `${window.location.origin}/${shortId}`;
+                // FORMAT PENDEK DENGAN PREFIKS /unlock/ AGAR TIDAK ERROR REDIRECT
+                const directUrl = `${window.location.origin}/unlock/${shortId}`;
 
                 document.getElementById('finalLink').value = directUrl;
                 document.getElementById('resultBox').style.display = 'block';
@@ -318,3 +318,4 @@
     </script>
 </body>
 </html>
+
