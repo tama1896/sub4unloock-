@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -167,12 +168,12 @@
             <button type="button" class="btn-generate" id="btnGen" onclick="generateLink(event)">GENERATE LINK!</button>
 
             <div class="result-box" id="resultBox">
-                <p>Link Terkunci Pendek Kamu:</p>
+                <p>Link Terkunci Kamu:</p>
                 <div class="input-group active" style="margin-bottom: 10px;">
                     <input type="text" id="finalLink" readonly style="text-align: center; font-weight: 700; color: #2563eb;">
                 </div>
                 <button type="button" class="btn-login" style="width: 100%; border-radius: 25px; padding: 12px; font-size: 14px;" onclick="copyLink()">
-                    <i class="fas fa-copy"></i> Salin Link Pendek
+                    <i class="fas fa-copy"></i> Salin Link
                 </button>
             </div>
         </div>
@@ -212,7 +213,6 @@
 
         const activeStates = { sub: true, like: true, ig: false, tg: false, wa: false };
 
-        // Background Bintang
         const starsContainer = document.getElementById('starsContainer');
         if(starsContainer) {
             for (let i = 0; i < 35; i++) {
@@ -227,15 +227,14 @@
             }
         }
 
-        // Animasi Live Traffic Gerak
         let trafficVal = 6729;
         const liveTrafficEl = document.getElementById('liveTraffic');
         if (liveTrafficEl) {
             setInterval(() => {
-                const change = Math.floor(Math.random() * 9) - 4; // acak -4 sampai +4
+                const change = Math.floor(Math.random() * 9) - 4;
                 trafficVal = Math.max(6600, Math.min(6850, trafficVal + change));
                 liveTrafficEl.innerText = trafficVal.toLocaleString('id-ID');
-            }, 2500); // Berubah setiap 2.5 detik
+            }, 2500);
         }
 
         window.toggleAction = function(type) {
@@ -251,14 +250,13 @@
             }
         };
 
-        // Fungsi membuat ID unik yang konsisten berdasarkan isi input (mencegah duplikat/spam database)
         async function getDeterministicId(str) {
             const encoder = new TextEncoder();
             const data = encoder.encode(str);
             const hashBuffer = await crypto.subtle.digest('SHA-256', data);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
             const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            return hashHex.substring(0, 8); // Ambil 8 karakter pertama sebagai ID unik
+            return hashHex.substring(0, 8);
         }
 
         window.generateLink = async function(event) {
@@ -275,7 +273,6 @@
             btnGen.disabled = true;
 
             try {
-                // Kumpulkan data input untuk dijadikan sidik jari (hash) unik
                 const rawDataString = targetVal + "|" +
                     (activeStates.sub ? document.getElementById('url-sub').value.trim() : "") + "|" +
                     (activeStates.like ? document.getElementById('url-like').value.trim() : "") + "|" +
@@ -283,7 +280,6 @@
                     (activeStates.tg ? document.getElementById('url-tg').value.trim() : "") + "|" +
                     (activeStates.wa ? document.getElementById('url-wa').value.trim() : "");
 
-                // Dapatkan ID yang konsisten (jika isi link sama, ID-nya akan sama persis)
                 const shortId = await getDeterministicId(rawDataString);
 
                 const payload = {
@@ -296,22 +292,13 @@
                     w: activeStates.wa ? document.getElementById('url-wa').value.trim() : null
                 };
 
-                // Menggunakan upsert: jika ID sudah ada di database, data lama tidak akan diduplikasi (aman dari spam/lag)
                 const { error } = await db.from('links').upsert([payload]);
                 if (error) throw error;
 
-                // URL BERSIH TANPA UNLOCK.HTML & ?ID=
-                const cleanUrl = window.location.origin + '/' + shortId;
-                let finalResultUrl = cleanUrl;
+                // MENGARAH LANGSUNG KE UNLOCK.HTML (TANPA TINYURL)
+                const directUrl = `${window.location.origin}/unlock.html?id=${shortId}`;
 
-                try {
-                    const res = await fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(cleanUrl));
-                    if (res.ok) {
-                        finalResultUrl = await res.text();
-                    }
-                } catch(e) {}
-
-                document.getElementById('finalLink').value = finalResultUrl;
+                document.getElementById('finalLink').value = directUrl;
                 document.getElementById('resultBox').style.display = 'block';
 
             } catch (error) {
@@ -327,7 +314,7 @@
             const copyText = document.getElementById('finalLink');
             copyText.select();
             document.execCommand('copy');
-            alert('Link pendek berhasil disalin!');
+            alert('Link berhasil disalin!');
         };
     </script>
 </body>
