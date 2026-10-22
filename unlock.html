@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -212,7 +213,6 @@
 
         const activeStates = { sub: true, like: true, ig: false, tg: false, wa: false };
 
-        // Background Bintang
         const starsContainer = document.getElementById('starsContainer');
         if(starsContainer) {
             for (let i = 0; i < 35; i++) {
@@ -227,7 +227,6 @@
             }
         }
 
-        // Animasi Live Traffic Gerak
         let trafficVal = 6729;
         const liveTrafficEl = document.getElementById('liveTraffic');
         if (liveTrafficEl) {
@@ -296,18 +295,10 @@
                 const { error } = await db.from('links').upsert([payload]);
                 if (error) throw error;
 
-                // MENGARAH LANGSUNG KE UNLOCK.HTML DENGAN PARAMETER ID
+                // MENGARAH LANGSUNG KE UNLOCK.HTML (TANPA TINYURL)
                 const directUrl = `${window.location.origin}/unlock.html?id=${shortId}`;
-                let finalResultUrl = directUrl;
 
-                try {
-                    const res = await fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(directUrl));
-                    if (res.ok) {
-                        finalResultUrl = await res.text();
-                    }
-                } catch(e) {}
-
-                document.getElementById('finalLink').value = finalResultUrl;
+                document.getElementById('finalLink').value = directUrl;
                 document.getElementById('resultBox').style.display = 'block';
 
             } catch (error) {
