@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subs4Unlock.net - Grow Your Social Media Followers & Content</title>
+    <title>sub4unloock.com - Grow Your Social Media Followers & Content</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
@@ -96,7 +95,7 @@
 <body>
 
     <header>
-        <a href="#" class="logo"><div class="logo-box"><i class="fas fa-layer-group"></i></div> SUBS4UNLOCK<span>.NET</span></a>
+        <a href="#" class="logo"><div class="logo-box"><i class="fas fa-layer-group"></i></div> SUB4UNLOOCK<span>.COM</span></a>
         <a href="#generate" class="btn-login"><i class="fas fa-user-circle"></i> LOGIN</a>
     </header>
 
@@ -180,8 +179,8 @@
     </div>
 
     <section class="features-section">
-        <h3>Features of Subs4unlock</h3>
-        <p class="sub-desc">Subs4unlock helps you grow your brand and expand your audience, so you can focus on what truly matters: creating great content.</p>
+        <h3>Features of Sub4unloock</h3>
+        <p class="sub-desc">Sub4unloock helps you grow your brand and expand your audience, so you can focus on what truly matters: creating great content.</p>
         
         <div class="features-grid">
             <div class="feature-card">
@@ -203,7 +202,7 @@
     </section>
 
     <footer>
-        <div class="copyright">© 2026 subs4unlock.net — Empowering Content Creators Worldwide.</div>
+        <div class="copyright">© 2026 sub4unloock.com — Empowering Content Creators Worldwide.</div>
     </footer>
 
     <script>
@@ -295,7 +294,7 @@
                 const { error } = await db.from('links').upsert([payload]);
                 if (error) throw error;
 
-                // MENGARAH LANGSUNG KE UNLOCK.HTML (TANPA TINYURL)
+                // MENGARAH LANGSUNG KE UNLOCK.HTML
                 const directUrl = `${window.location.origin}/unlock.html?id=${shortId}`;
 
                 document.getElementById('finalLink').value = directUrl;
