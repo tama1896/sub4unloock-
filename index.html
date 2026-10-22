@@ -125,7 +125,7 @@
         <div class="card-generator">
             <h2>Create Your Link</h2>
             <p class="instructions">Pilih langkah verifikasi yang ingin diselesaikan pengunjung:</p>
-            
+
             <div class="tags-container">
                 <button type="button" class="tag-btn tag-sub active" onclick="toggleAction('sub')"><i class="fab fa-youtube"></i> Subscribe</button>
                 <button type="button" class="tag-btn tag-like active" onclick="toggleAction('like')"><i class="fas fa-thumbs-up"></i> Like & Comment</button>
@@ -181,7 +181,7 @@
     <section class="features-section">
         <h3>Features of Sub4unloock</h3>
         <p class="sub-desc">Sub4unloock helps you grow your brand and expand your audience, so you can focus on what truly matters: creating great content.</p>
-        
+
         <div class="features-grid">
             <div class="feature-card">
                 <i class="fas fa-chart-line"></i>
@@ -294,7 +294,8 @@
                 const { error } = await db.from('links').upsert([payload]);
                 if (error) throw error;
 
-                const directUrl = `${window.location.origin}/unlock/${shortId}`;
+                // MENGGUNAKAN FORMAT QUERY PARAMETER AMAN (unlock.html?id=...)
+                const directUrl = `${window.location.origin}/unlock.html?id=${shortId}`;
 
                 document.getElementById('finalLink').value = directUrl;
                 document.getElementById('resultBox').style.display = 'block';
