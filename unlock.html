@@ -281,58 +281,69 @@
         let taskList = [];
         let completedCount = 0;
 
-        // FUNGSI PINTAR EKSTRAKSI ID LINK DARI BERBAGAI FORMAT URL
-        function getLinkIdFromURL() {
-            const searchParams = new URLSearchParams(window.location.search);
-            if (searchParams.has('id')) {
-                return searchParams.get('id');
-            }
+        function extractIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('id')) return params.get('id');
 
-            const path = window.location.pathname;
-            const segments = path.split('/').filter(Boolean);
-            
-            // Mengambil elemen terakhir dari URL path
-            if (segments.length > 0) {
-                const lastSegment = segments[segments.length - 1];
-                if (lastSegment !== 'unlock.html' && lastSegment !== 'unlock') {
-                    return lastSegment;
+            const fullPath = window.location.pathname;
+            const parts = fullPath.split('/').filter(p => p.length > 0);
+
+            if (parts.length > 0) {
+                const last = parts[parts.length - 1];
+                if (last !== 'unlock' && last !== 'unlock.html') {
+                    return last;
                 }
             }
             return null;
         }
 
         window.onload = async function() {
-            const linkId = getLinkIdFromURL();
+            const linkId = extractIdFromUrl();
             const container = document.getElementById('taskListContainer');
 
             if (!linkId) {
-                container.innerHTML = '<p style="color:#ef4444; font-size:13px; margin: 10px 0;">⚠️ Link ID tidak ditemukan di URL.</p>';
+                container.innerHTML = '<p style="color:#64748b; font-size:13px; margin: 10px 0;">Silakan gunakan link berformat lengkap /unlock/ID_LINK_KAMU</p>';
                 return;
             }
 
             try {
-                const { data, error } = await db.from('links').select('*').eq('id', linkId).single();
+                const { data, error } = await db.from('links').select('*').eq('id', linkId).maybeSingle();
 
-                if (error || !data) {
-                    console.error("Supabase query error:", error);
-                    container.innerHTML = `<p style="color:#ef4444; font-size:13px; margin: 10px 0;">⚠️ Data link ID (${linkId}) tidak ditemukan di database.</p>`;
+                if (error) {
+                    container.innerHTML = `<p style="color:#ef4444; font-size:12px;">Error database: ${error.message}</p>`;
                     return;
                 }
 
-                DESTINATION_URL = data.t;
-                if (data.s) taskList.push({ name: 'Subscribe Channel', url: data.s });
-                if (data.l) taskList.push({ name: 'Like & Comment on Video', url: data.l });
-                if (data.i) taskList.push({ name: 'Follow Instagram', url: data.i });
-                if (data.g) taskList.push({ name: 'Join Telegram', url: data.g });
-                if (data.w) taskList.push({ name: 'Join WhatsApp', url: data.w });
+                if (!data) {
+                    // JIKA DATA TIDAK DITEMUKAN, COBA DENGAN CARA BACA ALTERNATIF (QUERY ALL)
+                    const { data: allData } = await db.from('links').select('*');
+                    const matched = allData ? allData.find(item => item.id.trim() === linkId.trim()) : null;
 
-                renderTasks();
+                    if (matched) {
+                        loadTasksFromData(matched);
+                    } else {
+                        container.innerHTML = `<p style="color:#ef4444; font-size:13px; margin: 10px 0;">ID Link (<b>${linkId}</b>) tidak ditemukan di database baru. Coba buat link baru dari halaman depan.</p>`;
+                    }
+                    return;
+                }
+
+                loadTasksFromData(data);
 
             } catch (e) {
-                console.error("Fetch Exception:", e);
-                container.innerHTML = '<p style="color:#ef4444; font-size:13px; margin: 10px 0;">⚠️ Terjadi kesalahan saat membaca database.</p>';
+                container.innerHTML = `<p style="color:#ef4444; font-size:12px;">Kesalahan jaringan: ${e.message}</p>`;
             }
         };
+
+        function loadTasksFromData(data) {
+            DESTINATION_URL = data.t;
+            taskList = [];
+            if (data.s) taskList.push({ name: 'Subscribe Channel', url: data.s });
+            if (data.l) taskList.push({ name: 'Like & Comment on Video', url: data.l });
+            if (data.i) taskList.push({ name: 'Follow Instagram', url: data.i });
+            if (data.g) taskList.push({ name: 'Join Telegram', url: data.g });
+            if (data.w) taskList.push({ name: 'Join WhatsApp', url: data.w });
+            renderTasks();
+        }
 
         function renderTasks() {
             const container = document.getElementById('taskListContainer');
