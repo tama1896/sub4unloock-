@@ -206,8 +206,8 @@
     </footer>
 
     <script>
-        const SUPABASE_URL = 'https://rntzkzehtcnernjzfxcs.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_QsdJxlNLuWz9vvaDQ3AJBQ_gruuJ6sk';
+        const SUPABASE_URL = 'https://rhlfowrffdjkiqlckzwf.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable__0Ani2ZnbQxeLEVrVjCvEQ_aAx4SV3c';
         const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const activeStates = { sub: true, like: true, ig: false, tg: false, wa: false };
@@ -294,7 +294,6 @@
                 const { error } = await db.from('links').upsert([payload]);
                 if (error) throw error;
 
-                // FORMAT PENDEK DENGAN PREFIKS /unlock/ AGAR TIDAK ERROR REDIRECT
                 const directUrl = `${window.location.origin}/unlock/${shortId}`;
 
                 document.getElementById('finalLink').value = directUrl;
@@ -318,4 +317,3 @@
     </script>
 </body>
 </html>
-
