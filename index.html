@@ -294,8 +294,8 @@
                 const { error } = await db.from('links').upsert([payload]);
                 if (error) throw error;
 
-                // MENGGUNAKAN FORMAT QUERY PARAMETER AMAN (unlock.html?id=...)
-                const directUrl = `${window.location.origin}/unlock.html?id=${shortId}`;
+                // MENGGUNAKAN FORMAT LINK PENDEK & RAPI (/unlock/shortId)
+                const directUrl = `${window.location.origin}/unlock/${shortId}`;
 
                 document.getElementById('finalLink').value = directUrl;
                 document.getElementById('resultBox').style.display = 'block';
