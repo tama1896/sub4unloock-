@@ -241,7 +241,7 @@
         <span class="badge-step">COMPLETE ALL STEPS BELOW</span>
 
         <div class="task-list" id="taskListContainer">
-            <p style="color:#64748b; font-size:13px;">Memuat data link...</p>
+            <p style="color:#64748b; font-size:13px;">⏳ Memuat data tugas...</p>
         </div>
 
         <div class="progress-text" id="progressText">Steps Completed 0/0</div>
@@ -281,34 +281,57 @@
         let taskList = [];
         let completedCount = 0;
 
-        window.onload = async function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            let linkId = urlParams.get('id');
+        // FUNGSI PINTAR EKSTRAKSI ID LINK DARI BERBAGAI FORMAT URL
+        function getLinkIdFromURL() {
+            const searchParams = new URLSearchParams(window.location.search);
+            if (searchParams.has('id')) {
+                return searchParams.get('id');
+            }
 
-            if (!linkId) {
-                const pathParts = window.location.pathname.split('/').filter(p => p);
-                if (pathParts.length > 0) {
-                    linkId = pathParts[pathParts.length - 1];
-                    if (linkId === 'unlock.html' || linkId === 'unlock') {
-                        linkId = null;
-                    }
+            const path = window.location.pathname;
+            const segments = path.split('/').filter(Boolean);
+            
+            // Mengambil elemen terakhir dari URL path
+            if (segments.length > 0) {
+                const lastSegment = segments[segments.length - 1];
+                if (lastSegment !== 'unlock.html' && lastSegment !== 'unlock') {
+                    return lastSegment;
                 }
             }
+            return null;
+        }
 
-            if (linkId) {
-                try {
-                    const { data, error } = await db.from('links').select('*').eq('id', linkId).single();
-                    if (data) {
-                        DESTINATION_URL = data.t;
-                        if (data.s) taskList.push({ name: 'Subscribe Channel', url: data.s });
-                        if (data.l) taskList.push({ name: 'Like & Comment on Video', url: data.l });
-                        if (data.i) taskList.push({ name: 'Follow Instagram', url: data.i });
-                        if (data.g) taskList.push({ name: 'Join Telegram', url: data.g });
-                        if (data.w) taskList.push({ name: 'Join WhatsApp', url: data.w });
-                    }
-                } catch (e) {}
+        window.onload = async function() {
+            const linkId = getLinkIdFromURL();
+            const container = document.getElementById('taskListContainer');
+
+            if (!linkId) {
+                container.innerHTML = '<p style="color:#ef4444; font-size:13px; margin: 10px 0;">⚠️ Link ID tidak ditemukan di URL.</p>';
+                return;
             }
-            renderTasks();
+
+            try {
+                const { data, error } = await db.from('links').select('*').eq('id', linkId).single();
+
+                if (error || !data) {
+                    console.error("Supabase query error:", error);
+                    container.innerHTML = `<p style="color:#ef4444; font-size:13px; margin: 10px 0;">⚠️ Data link ID (${linkId}) tidak ditemukan di database.</p>`;
+                    return;
+                }
+
+                DESTINATION_URL = data.t;
+                if (data.s) taskList.push({ name: 'Subscribe Channel', url: data.s });
+                if (data.l) taskList.push({ name: 'Like & Comment on Video', url: data.l });
+                if (data.i) taskList.push({ name: 'Follow Instagram', url: data.i });
+                if (data.g) taskList.push({ name: 'Join Telegram', url: data.g });
+                if (data.w) taskList.push({ name: 'Join WhatsApp', url: data.w });
+
+                renderTasks();
+
+            } catch (e) {
+                console.error("Fetch Exception:", e);
+                container.innerHTML = '<p style="color:#ef4444; font-size:13px; margin: 10px 0;">⚠️ Terjadi kesalahan saat membaca database.</p>';
+            }
         };
 
         function renderTasks() {
